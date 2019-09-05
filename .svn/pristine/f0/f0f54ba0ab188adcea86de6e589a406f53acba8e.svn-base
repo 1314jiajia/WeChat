@@ -1,0 +1,67 @@
+<?php
+	// 设置token
+	define('TOKEN','Jojo');
+
+   // 获取服务器传递参数
+ //    function checkSignature()
+	// {
+	// 	// 加密签名
+	// 	$signature = $_GET["signature"];
+		
+	// 	// 时间戳 
+	// 	$timestamp = $_GET["timestamp"];
+
+	// 	// 随机数
+	// 	$nonce = $_GET["nonce"];
+
+	// 	// 把数据拼装成数组
+	// 	$tmpArr = array($timestamp, $nonce,TOKEN);
+		
+	// 	// 排序
+	// 	sort($tmpArr, SORT_STRING);
+		
+	// 	// 数组转成字符串 
+	// 	$tmpStr = implode( $tmpArr );
+		
+	// 	// 加密
+	// 	$tmpStr = sha1( $tmpStr );
+ 		
+ // 		// 对比服务器和刚刚加密的信息
+	// 	if( $signature == $tmpStr ){
+	// 		return true;
+	// 	}else{
+	// 		return false;
+	// 	}
+
+	// }
+	function checksignature(){
+	//接收下微信服务器传递的参数
+	$signature=$_GET['signature'];//微信加密签名
+	$timestamp=$_GET['timestamp'];//时间戳
+	$nonce=$_GET['nonce'];//随机数
+	//将TOKEN timestamp nonce 字典排序
+	$arr=array($nonce,$timestamp,TOKEN);
+	//字典排序 SORT_STRING(快速排序)
+	sort($arr,SORT_STRING);
+	//转换为字符串
+	$str=implode($arr);
+	//对字符串做加密
+	$str1=sha1($str);
+	//和微信加密签名做对比
+	if($str1==$signature){
+		return true;// token已经做了校验 消息的确来自于微信服务器
+	}else{
+		return false;// token 校验失败
+	}
+
+
+}
+		// 调用函数
+		if(checksignature()){
+			$echostr = $_GET['echostr'];
+			// 是否有值
+			if($echostr){
+				return $echostr;
+				exit;
+			}
+		}
