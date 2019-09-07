@@ -1,0 +1,104 @@
+<?php
+
+// 调用之定义菜单接口
+// 1.初始化
+	$cn = curl_init();
+	
+	// 2.链接邀请求的接口地址
+	$appid = "wx69a8e6f8662498de";
+	$secret = "fc2a855d4e6a9885390cd71e34f2b45c";
+	$Url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid={$appid}&secret={$secret}"; 
+	// 3. 设置传输至
+	curl_setopt($cn,CURLOPT_URL,$Url);
+
+	// 4. 以文件流的形式返回
+	curl_setopt($cn,CURLOPT_RETURNTRANSFER,1);
+
+	// 5. 执行
+	 $data = curl_exec($cn);
+	// 6. 关闭 
+	curl_close($cn);
+
+	// echo $data;
+	$Res = json_decode($data,true);
+	
+	$access_token = $Res['access_token'];
+
+	// 	模拟post
+
+	$po = curl_init();
+
+	// 请求地址
+	$PostUrl = "https://api.weixin.qq.com/cgi-bin/getcallbackip?access_token=ACCESS_TOKEN";
+	// 导航内容
+	$post = '{
+		     "button":[
+		     {  
+		          "type":"click",
+		          "name":"每日一笑",
+		          "key":"笑话"
+		      },
+		      {
+		           "name":"生活常用",
+		           "sub_button":[
+		           {  
+		               "type":"view",
+		               "name":"百度搜搜",
+		               "url":"http://www.baidu.com"
+		            },
+
+		             {
+		                    "type": "click", 
+		                    "name": "今日天气", 
+		                    "key": "天气" 
+		                  
+		                 },
+		                  {
+		                "name": "您的位置", 
+		                "type": "location_select", 
+		                "key": "position"
+		            },
+		            {
+		               "type":"click",
+		               "name":"头条新闻",
+		               "key":"头条"
+		            }]
+		       },
+
+		        {
+		           "name":"兄弟连",
+		           "sub_button":[
+		           {  
+		               "type":"view",
+		               "name":"官网",
+		               "url":"http://www.itxdl.cn"
+		            },
+		            {
+		               "type":"click",
+		               "name":"免费获取资源",
+		               "key":"资源"
+		            }               
+		            ]
+		       }
+
+		       ]
+	 }';
+	// 设置传输的值
+	 curl_setopt($po,CURLOPT_URL,$PostUrl);	
+	
+	// 模拟post方式
+	 curl_setopt($po,CURLOPT_POST,1);
+
+	// 参数传递CURLOPT_POSTFIELDS
+	 curl_setopt($po,CURLOPT_POSTFIELDS,$post);
+	
+	//执行
+	  $info = curl_exec($po);
+
+	// 关闭资源
+		curl_close($po);
+	// 返回结果
+		echo $info;
+
+
+

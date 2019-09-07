@@ -347,9 +347,9 @@
 											  <Content><![CDATA[%s]]></Content>
 											</xml>";
 								}
-					break;
+									break;
 									
-			}
+										}
 			
 	}
 
